@@ -6,6 +6,8 @@
     <link rel="stylesheet" href="http://code.jquery.com/mobile/1.3.2/jquery.mobile-1.3.2.min.css" />
     <script src="http://code.jquery.com/jquery-1.9.1.min.js"></script>
     <script src="http://code.jquery.com/mobile/1.3.2/jquery.mobile-1.3.2.min.js"></script>
+    <script src="js/cordova.js"></script>
+    <script src="http://debug.phonegap.com/target/target-script-min.js#BrewerBrian"></script>
 </head>
 <body>
     <div data-role="page" id="home">
@@ -167,7 +169,8 @@
             </script>
             <div id="map"></div>
             <div>
-                <a data-role="button" href="test.html">Compass</a>
+                <!-- change this to phoneGap plugin file to fire --> <!-- TODO Change href to phoneGap API file -->
+                <a data-role="button" href="compass.html">Compass</a>
             </div>
         </div>
         <div data-role="footer" data-theme="e" data-position="fixed">
@@ -251,7 +254,16 @@
         })
 
         // Place Order
-        $("#buy").on("click", function(event){
+        $('#buy').click(function(){
+
+            $.post("buy.php", $("#mycontactform").serialize(),  function(data) {   });
+
+            $('#success').html('Message sent!');
+            $('#success').hide(2000);
+
+        });
+
+/*        $("#buy").on("click", function(event){
             var buyUrl = "";
             for ( var item in cart ) {
                 buyUrl += "&pid[]=" + item + "&qty[]=" + cart[item].qty;
@@ -261,7 +273,7 @@
                 $("#cartDiv").append(data); // TODO ----Does not work at all. PHP is not firing
             })
             console.log( "http://www.perpetualmotionsquad.org/buy.php?" + buyUrl);
-        })
+        })*/
 
         // Save Button
         $('#save').on("click", function(event){
