@@ -1,13 +1,10 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Compass Example</title>
+    <title>Contact Example</title>
 
     <script type="text/javascript" charset="utf-8" src="js/cordova.js"></script>
     <script type="text/javascript" charset="utf-8">
-
-        // The watch id references the current `watchHeading`
-        var watchID = null;
 
         // Wait for device API libraries to load
         //
@@ -16,46 +13,56 @@
         // device APIs are available
         //
         function onDeviceReady() {
-            startWatch();
+            // create
+            var contact = navigator.contacts.create();
+            contact.displayName = "Brian's Pizza Palace";
+            contact.nickname = "Pizza";                 // specify both to support all devices
+            var name = new ContactName();
+            name.givenName = "Brian";
+            name.familyName = "McDaily";
+            contact.name = name;
+
+            // save
+            contact.save(onSaveSuccess,onSaveError);
+
+            // clone
+            var clone = contact.clone();
+            clone.name.givenName = "Brian";
+            console.log("Original contact name = " + contact.name.givenName);
+            console.log("Cloned contact name = " + clone.name.givenName);
+
+            // remove
+            contact.remove(onRemoveSuccess,onRemoveError);
         }
 
-        // Start watching the compass
+        // onSaveSuccess: Get a snapshot of the current contacts
         //
-        function startWatch() {
-
-            // Update compass every 3 seconds
-            var options = { frequency: 2000 };
-
-            watchID = navigator.compass.watchHeading(onSuccess, onError, options);
+        function onSaveSuccess(contact) {
+            alert("Save Success");
         }
 
-        // Stop watching the compass
+        // onSaveError: Failed to get the contacts
         //
-        function stopWatch() {
-            if (watchID) {
-                navigator.compass.clearWatch(watchID);
-                watchID = null;
-            }
+        function onSaveError(contactError) {
+            alert("Error = " + contactError.code);
         }
 
-        // onSuccess: Get the current heading
+        // onRemoveSuccess: Get a snapshot of the current contacts
         //
-        function onSuccess(heading) {
-            var element = document.getElementById('heading');
-            element.innerHTML = 'Heading: ' + heading.magneticHeading;
+        function onRemoveSuccess(contacts) {
+            alert("Removal Success");
         }
 
-        // onError: Failed to get the heading
+        // onRemoveError: Failed to get the contacts
         //
-        function onError(compassError) {
-            alert('Compass error: ' + compassError.code);
+        function onRemoveError(contactError) {
+            alert("Error = " + contactError.code);
         }
 
     </script>
 </head>
 <body>
-<div id="heading">Waiting for heading...</div>
-<button onclick="startWatch();">Start Watching</button>
-<button onclick="stopWatch();">Stop Watching</button>
+<h1>Example</h1>
+<p>Find Contacts</p>
 </body>
 </html>
