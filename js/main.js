@@ -10,8 +10,6 @@ document.addEventListener('deviceready', function () {
 
     var options = { frequency:100 };
     watchID = navigator.compass.watchHeading(function (heading) {
-        // only magnetic heading works universally on iOS and Android
-        // round off the heading then trigger newHeading event for any listeners
         var newHeading = Math.round(heading.magneticHeading);
         rotate(360  + ( -1 * window.orientation )  -  newHeading);
         $("#headingValue").html(newHeading + "&deg;");
